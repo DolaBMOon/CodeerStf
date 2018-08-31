@@ -25,8 +25,15 @@ int main()
 {
 	scanf("%d",&n);
 	S=(1<<n)-1;
+	int res=0;
 	for(int i=0;i<=S;++i)
+	{
 		scanf("%lf",f+(S^i));
+		if(f[S^i]>1e-6)
+			res|=i;
+	}
+	if(res!=S)
+		return 0*puts("INF");
 	for(int i=1;i<S;i<<=1)
 		for(int j=1;j<=S;++j)if(j&i)
 			f[j^i]+=f[j];
@@ -36,17 +43,10 @@ int main()
 		sz[i]=sz[i^(i&(-i))]+1;
 	double ans=0;
 	for(int i=1;i<=S;++i)
-	{
 		if(sz[i]&1)
 			ans+=1/f[i];
 		else
 			ans-=1/f[i];
-		if(ans>1e18)
-		{
-			puts("INF");
-			return 0;
-		}
-	}
 	printf("%lf",ans);
 	return 0;
 }
