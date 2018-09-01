@@ -51,24 +51,24 @@ int main()
 		int u=min((ll)T,n/(i*(ll)i)),uu=min(u,T/i);
 		for(int j=1;j<=uu;++j)
 			b1[j]-=(b1[j*i]-x1)*i,
-			b0[j]-=b0[j*i]-x0;
+				b0[j]-=b0[j*i]-x0;
 		ll t=n/i;
 		if(t<=2147483647)
 		{
-		int tt=t;
-		for(int j=uu+1;j<=u;++j)
-			b1[j]-=(c1[tt/j]-x1)*i,
-			b0[j]-=c0[tt/j]-x0;
+			int tt=t;
+			for(int j=uu+1;j<=u;++j)
+				b1[j]-=(c1[tt/j]-x1)*i,
+					b0[j]-=c0[tt/j]-x0;
 		}
 		else
 		{
 		for(int j=uu+1;j<=u;++j)
 			b1[j]-=(c1[t/j]-x1)*i,
-			b0[j]-=c0[t/j]-x0;
+				b0[j]-=c0[t/j]-x0;
 		}
 		for(int j=S;j>=r;--j)
 			c1[j]-=(c1[j/i]-x1)*i,
-			c0[j]-=c0[j/i]-x0;
+				c0[j]-=c0[j/i]-x0;
 	}
 	for(int i=1;i<=S;++i)
 	{
