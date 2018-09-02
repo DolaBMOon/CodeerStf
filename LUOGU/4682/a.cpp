@@ -27,6 +27,23 @@ struct Vector
 		return sqrt(x*x+y*y);
 	}
 
+	double Fix()
+	{
+		double d=Abs();
+		x/=d;
+		y/=d;
+	}
+
+	double Dot(const Vector& v)
+	{
+		return x*v.x+y*v.y;
+	}
+	
+	double Det(const Vector& v)
+	{
+		return x*v.y-y*v.x;
+	}
+
 	void Read()
 	{
 		scanf("%lf%lf",&x,&y);
@@ -86,16 +103,26 @@ Vector operator-(const Vector& a)
 	return {-a.x,-a.y};
 }
 
+double Sqr(double x)
+{
+	return x*x;
+}
+
 int n,k,R;
 Vector p[N],v[N];
 
 vector<int> tm[N];
 
-void Biu(Vector& p,Vector& v,vector<int>& res)
+vector<int> Biu(Vector p,Vector v)
 {
-	res.clear();
+	static vector<int> res(k);
 	double m=v.Abs();
-	Vector a=-p;
+	v.Fix();
+	for(int i=0;i<k;++i)
+	{
+		Vector q=-p;
+		double a=v.Dot(a),b=sqrt(R*R-Sqr(q.Abs())-1);
+	}
 }
 
 int main()
@@ -108,7 +135,7 @@ int main()
 		p[i].Read();
 		p[i]-=o_o;
 		v[i].Read();
-		Biu(p[i],v[i],tm[i]);
+		tm[i]=Biu(p[i],v[i]);
 	}
 	return 0;
 }
