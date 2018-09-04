@@ -1,8 +1,10 @@
+#pragma GCC optimize("Ofast")
 #include<iostream>
 #include<algorithm>
 #include<cstdio>
 #include<cstring>
 #include<cassert>
+#include<map>
 
 using namespace std;
 
@@ -23,21 +25,33 @@ using namespace std;
 
 const int N=250000+10;
 const int M=520;
+const int INF=0x3f3f3f3f3f3f3f3f;
 
 int n,m,k;
 int h[N];
 Pir p[M];
 
-int Calc(int h)
+map<int,int> mp;
+
+int Calc(int h,int r=m)
 {
-	int cnt=0;
-	for(int i=m,d;h&&i>0;--i)if(h>p[i-1].fir)
-	{
-		d=(h-p[i-1].fir-1)/p[i].sec+1;
-		cnt+=d;
-		h-=d*p[i].sec;
-	}
-	return cnt;
+	if(mp.count(h))
+		return mp[h];
+	int &cnt=mp[h];
+	if(h<=0)
+		return cnt=0;
+	if(p[r].fir<h)
+		return cnt=INF;
+	int left=0,mid,right=r,res=0;
+	while(left<=right)
+		if(p[mid=(left+right)>>1].fir<h)
+			left=(res=mid)+1;
+		else
+			right=mid-1;
+	int d=(h-p[res].fir-1)/p[res+1].sec+1;
+	cnt=d;
+	h-=d*p[res+1].sec;
+	return cnt+=Calc(h,res);
 }
 
 signed main()
@@ -49,19 +63,21 @@ signed main()
 		scanf("%lld%lld",&p[i].fir,&p[i].sec);
 	sort(p+1,p+m+1);
 	int t=m;
-	m=0;
-	for(int i=1;i<=t;++i)
+	m=1;
+	for(int i=2;i<=t;++i)
 	{
 		for(;m>0&&p[i].sec>=p[m].sec;--m);
 		p[++m]=p[i];
 	}
 	int cnt=0;
-	for(int i=n,t;i>0&&t;--i)
+	for(int i=n,t;i>0;--i)
 		if((t=k-Calc(h[i]))>=0)
 		{
 			k=t;
 			++cnt;
 		}
-	printf("%lld %lld",cnt,k);
+		else
+			break;
+	printf("%lld %lld\n",cnt,k);
 	return 0;
 }

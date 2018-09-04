@@ -1,0 +1,23 @@
+#include<iostream>
+#include<algorithm>
+#include<cstdio>
+#include<cstring>
+#include<cassert>
+
+using namespace std;
+
+#define Whats(x) cout<<#x<<" is "<<(x)<<endl
+#define DivHim() cout<<">>>>>>>>>>>>>>>"<<endl
+#define DivHer() cout<<"<<<<<<<<<<<<<<<"<<endl
+#define Oops() cout<<"!!!!!!!!!!!!!!!"<<endl
+
+/*
+-<Unlimited Blade Works>-
+*/
+
+int n,m;
+
+int main()
+{
+	return 0;
+}
