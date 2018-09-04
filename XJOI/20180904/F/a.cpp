@@ -3,8 +3,9 @@
 #include<cstdio>
 #include<cstring>
 #include<cassert>
-#include<vector>
-#include<set>
+#include<queue>
+#include<map>
+#include<ext/pb_ds/priority_queue.hpp>
 
 using namespace std;
 
@@ -17,43 +18,51 @@ using namespace std;
 -<Unlimited Blade Works>-
 */
 
-#define Pir pair<int,int>
 #define fir first
-#define sec seond
+#define sec second
+
+#define PQ __gnu_pbds::priority_queue<int, less<int>, __gnu_pbds::pairing_heap_tag>
+#define PT PQ::point_iterator
 
 const int N=200000+10;
-const int LG=20;
 
 int n,m,exn;
 bool on[N];
 
-int _fir[N],_nxt[N<<1],_to[N<<1],_tote;
-int fir[N],nxt[N<<1],to[N<<1],w[N<<1],tote;
+int fir[N],nxt[N<<2],to[N<<2],w[N<<2],tote;
 
-void Adde(int u,int v,int x)
+void Adde(int u,int v)
 {
-	//cout<<u<<"---"<<v<<endl;
+	int x=(v<=n);
 	to[++tote]=v;w[tote]=x;nxt[tote]=fir[u];fir[u]=tote;
 	to[++tote]=u;w[tote]=x;nxt[tote]=fir[v];fir[v]=tote;
 }
 
 void Song(int u,int fa=0)
 {
-	int o=u;
-	bool fl=false;
-	for(int i=_fir[u],v;i;i=_nxt[i])if((v=_to[i])!=fa)
-	{
-		if(fl)
-		{
-			Adde(o,++exn,0);
-			Adde(o=exn,v,1);
-		}
-		else
-		{
-			Adde(u,v,1);
-			fl=true;
-		}
+	for(int i=fir[u],v;i;i=nxt[i])if((v=to[i])!=fa)
 		Song(v,u);
+
+	static queue<int> Q;
+	for(int i=fir[u],v;i;i=nxt[i])if((v=to[i])!=fa)
+		Q.push(v);
+
+	fir[u]=0;
+	while(Q.size()>2)
+	{
+		int v=Q.front(),v2;
+		Q.pop();
+		v2=Q.front();
+		Q.pop();
+		Adde(++exn,v);
+		Adde(exn,v2);
+		Q.push(exn);
+	}
+	while(!Q.empty())
+	{
+		int v=Q.front();
+		Q.pop();
+		Adde(u,v);
 	}
 }
 
@@ -72,38 +81,29 @@ int ban[N],totc,tp[N],tpf[N],fa[N],sz[N],lst[N],ed,low[N],ch[N][2],rt[N][2],mxl[
 namespace STr
 {
 
-	int lc[LG*N],rc[LG*N],tot,w[LG*N],as[LG*N];
+	int w[N],as[N],tot;
+	map<int,pair<int,PT> > mp[N];
+	PQ D[N];
 
-	void Insert(int &o,int p,int k,int l=1,int r=n)
+	void Insert(int &o,int p,int k)
 	{
 		if(!o)
 			o=++tot;
-		GetMax(w[o],k);
-		if(l==r)
-		{
-			as[o]=k;
-			return;
-		}
-		int mid=(l+r)>>1;
-		if(p<=mid)
-			Insert(lc[o],p,k,l,mid);
-		else
-			Insert(rc[o],p,k,mid+1,r);
+		PT it=D[o].push(k);
+		mp[o][p]=pair<int,PT>(k,it);
+		w[o]=D[o].top();
 	}
 
-	void Xor(int o,int p,int l=1,int r=n)
+	void Xor(int o,int p)
 	{
-		if(l==r)
-		{
-			w[o]=(on[p]?as[o]:0);
-			return;
-		}
-		int mid=(l+r)>>1;
-		if(p<=mid)
-			Xor(lc[o],p,l,mid);
+		if(on[p])
+			mp[o][p].sec=D[o].push(mp[o][p].fir);
 		else
-			Xor(rc[o],p,mid+1,r);
-		w[o]=max(w[lc[o]],w[rc[o]]);
+			D[o].erase(mp[o][p].sec);
+		if(!D[o].empty())
+			w[o]=D[o].top();
+		else
+			w[o]=0;
 	}
 
 }
@@ -138,7 +138,7 @@ void Build(int u,int comefrom=0,int fl=0)
 {
 	int id=++totc;
 	tp[id]=comefrom;
-	tpf[id]=comefrom;
+	tpf[id]=fl;
 	fa[u]=ed=0;
 	Dfs(u);
 	if(ed==1)
@@ -194,8 +194,8 @@ int main()
 	for(int i=1,u,v;i<n;++i)
 	{
 		scanf("%d%d",&u,&v);
-		_to[++_tote]=v;_nxt[_tote]=_fir[u];_fir[u]=_tote;
-		_to[++_tote]=u;_nxt[_tote]=_fir[v];_fir[v]=_tote;
+		to[++tote]=v;nxt[tote]=fir[u];fir[u]=tote;
+		to[++tote]=u;nxt[tote]=fir[v];fir[v]=tote;
 	}
 
 	exn=n;
