@@ -1,3 +1,4 @@
+#pragma GCC optimize(2)
 #include<iostream>
 #include<algorithm>
 #include<cstdio>
