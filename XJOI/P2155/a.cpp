@@ -39,7 +39,7 @@ void Adde(int u,int v,int cap,int cost)
 	edges[++tote]=(Edge){v,cap,cost};
 	nxt[tote]=fir[u];fir[u]=tote;
 	edges[++tote]=(Edge){u,0,-cost};
-	nxt[tote]=fir[u];fir[u]=tote;
+	nxt[tote]=fir[v];fir[v]=tote;
 }
 
 int d[N];
