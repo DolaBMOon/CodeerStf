@@ -7,6 +7,7 @@
 
 using namespace std;
 
+
 #define Whats(x) cout<<#x<<" is "<<(x)<<endl
 #define DivHim() cout<<">>>>>>>>>>>>>>>"<<endl
 #define DivHer() cout<<"<<<<<<<<<<<<<<<"<<endl
@@ -38,6 +39,8 @@ void Prework()
 		tr[i]=((i&1)?255:0)^((i&2)?(255<<8):0)^((i&4)?(255<<16):0)^((i&8)?(255<<24):0);
 		bo[i]=bo[i^(i&(-i))]+1;
 	}
+	for(int i=1;i<16;++i)
+		bo[i]=4-bo[i];
 }
 
 char s[10];
@@ -58,7 +61,7 @@ void Update(char *s)
 			dp[j^i]-=dp[j];
 	for(int i=0;i<16;++i)
 	{
-		if(4-bo[i]==d)
+		if(bo[i]==d)
 			ans+=dp[i];
 		++cnt[id&tr[i]];
 	}

@@ -80,10 +80,7 @@ int main()
 		++n;
 		last=1;
 		for(char *j=s;*j;++j)
-		{
 			Append(*j-'a',1<<(n-1));
-			Whats(tot);
-		}
 	}
 	printf("%d",Calc());
 	return 0;
