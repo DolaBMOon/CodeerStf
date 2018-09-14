@@ -33,7 +33,7 @@ template<typename T> bool GetMax(T &a,T b)
 
 #define LL long long
 
-const int N=6000000+10;
+const int N=5000000+10;
 const int INF=0x3f3f3f3f;
 
 int MOD;
@@ -69,7 +69,6 @@ int Cu(int x,int y)
 int n,wt;
 char s[N];
 int op[N],nu[N];
-bool vis[N],out[N];
 Triple w[N];
 vector<int> G[N];
 
@@ -107,21 +106,15 @@ int rt,lc[N],rc[N],fu[N],ans[N],sz;
 void Buildx(int &o=rt,int l=1,int r=n)
 {
 	Triple t=Query(l,r);
-	o=t.thi;
+	o=-t.thi;
 	if(l<o)
 		Buildx(lc[o],l,o-1);
 	else
-	{
 		fu[lc[o]=++sz]=nu[o-1];
-		out[lc[o]]=vis[o-1];
-	}
 	if(o<r)
 		Buildx(rc[o],o+1,r);
 	else
-	{
 		fu[rc[o]=++sz]=nu[o];
-		out[rc[o]]=vis[o];
-	}
 	int a=fu[lc[o]],b=fu[rc[o]];
 	switch(op[o])
 	{
@@ -136,8 +129,6 @@ void Song(int o=rt,int k=wt)
 {
 	if(o>n)
 	{
-		if(!out[o])
-			return;
 		switch(k)
 		{
 			case -1:
@@ -155,6 +146,7 @@ void Song(int o=rt,int k=wt)
 	if(k<0)
 	{
 		Song(lc[o],k);
+		Song(rc[o],k);
 		return;
 	}
 	switch(op[o])
@@ -209,12 +201,12 @@ int main()
 		if(isdigit(s[i]))
 		{
 			int &x=nu[n];
-			vis[n]=true;
 			x=s[i]-48;
 			int j;
 			for(j=i+1;isdigit(s[j]);++j)
 				x=x*10-48+s[j];
 			i=j-1;
+			//Whats(x);
 		}
 		else
 		{
@@ -222,24 +214,24 @@ int main()
 			{
 				case '+':
 					w[++n].fir=a;
-					w[n].thi=n;
+					w[n].thi=-n;
 					break;
 				case '-':
 					op[++n]=1;
 					w[n].fir=a;
-					w[n].thi=n;
+					w[n].thi=-n;
 					break;
 				case '*':
 					op[++n]=2;
 					w[n].fir=a;
 					w[n].sec=1;
-					w[n].thi=n;
+					w[n].thi=-n;
 					break;
 				case '/':
 					op[++n]=3;
 					w[n].fir=a;
 					w[n].sec=1;
-					w[n].thi=n;
+					w[n].thi=-n;
 					break;
 				case '(':++a;break;
 				case ')':--a;break;

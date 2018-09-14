@@ -3,6 +3,7 @@
 #include<cstdio>
 #include<cstring>
 #include<cassert>
+#include<set>
 
 using namespace std;
 
@@ -25,76 +26,197 @@ template<typename T> bool GetMax(T &a,T b)
 	 -<Unlimited Blade Works>-
  */
 
-const int N=1e6;
+#define int long long
 
-struct Data
+#define Pir pair<int,int>
+#define fir first
+#define sec second
+
+struct Vector
 {
-	int x,y,id;
-}p[N];
 
-bool Cmp(const Data &a,const Data &b)
+	int x,y;
+
+	void Read()
+	{
+		scanf("%lld%lld",&x,&y);
+	}
+
+};
+
+Vector operator*(const Vector &a,const Vector &b)
+{
+	return (Vector){a.x*b.x-a.y*b.y,a.x*b.y+a.y*b.x};
+}
+
+Vector operator*=(Vector &a,const Vector &b)
+{
+	return a=a*b;
+}
+
+int Dot(const Vector &a,const Vector &b)
+{
+	return a.x*b.x+a.y*b.y;
+}
+
+ostream& operator<<(ostream &os,const Vector &a)
+{
+	os<<"("<<a.x<<","<<a.y<<")";
+	return os;
+}
+
+const int N=2e5+10;
+const int INF=0x3f3f3f3f;
+
+struct St
+{
+
+	int mx[N<<2];
+
+	void Update(int q,int w,int o=1,int l=1,int r=N)
+	{
+		if(l==r)
+		{
+			mx[o]=w;
+			return;
+		}
+		int lc=o<<1,rc=lc^1,mid=(l+r)>>1;
+		if(q<=mid)
+			Update(q,w,lc,l,mid);
+		else
+			Update(q,w,rc,mid+1,r);
+		mx[o]=max(mx[lc],mx[rc]);
+	}
+
+	int Query(int q,int o=1,int l=1,int r=N)
+	{
+		if(r<=q)
+			return mx[o];
+		int mid=(l+r)>>1;
+		if(q<=mid)
+			return Query(q,o<<1,l,mid);
+		else
+			return max(mx[o<<1],Query(q,(o<<1)^1,mid+1,r));
+	}
+
+}A,B;
+
+int n,ki,tot,m,dp[N],que[N];
+Vector u0,v0,p[N],ap[N];
+bool fl[N];
+
+void Trans(Vector &p)
+{
+	p*=u0;
+	int x=Dot(u0,p),y=Dot(v0,p);
+	p=(Vector){x,y};
+}
+
+bool Cmpx(Vector a,Vector b)
 {
 	return (a.x!=b.x)?(a.x<b.x):(a.y<b.y);
 }
 
-int n,m,C[N],ls[N],ed;
-
-void Update(int x,int w)
+bool Cmpy(const Vector &a,const Vector &b)
 {
-	for(;x<=ed;x+=x&(-x))
-		GetMax(C[x],w);
+	return (a.y!=b.y)?(a.y<b.y):(a.x<b.x);
 }
 
-int Query(int x)
-{
-	int res=0;
-	for(;x;x-=x&(-x))
-		GetMax(res,C[x]);
-	return res;
-}
+set<Pir> Sx,Sy;
 
-int Cxt(int k)
+void Prework()
 {
-	int q;
-	sort(p+1,p+n+1,Cmp);
+	sort(p+1,p+n+1,Cmpx);
+	static Vector ls[N];
+	int ed=0;
+	for(int i=1;i<=tot;++i)
+		ls[++ed]=p[i];
+	sort(ls+1,ls+ed+1,Cmpx);
+	for(int i=1;i<=tot;++i)
+		p[i].x=lower_bound(ls+1,ls+ed+1,p[i],Cmpx)-ls;
 	ed=0;
-	for(q=1;p[q].id!=k;++q)
-		ls[++ed]=p[q].y;
-	ls[++ed]=p[q].y;
-	sort(ls+1,ls+ed+1);
-	ed=unique(ls+1,ls+ed+1)-ls-1;
-	memset(C+1,0,ed*sizeof(*C));
-	for(int i=1,y,w;i<=q;++i)
-	{
-		y=lower_bound(ls+1,ls+ed+1,p[i].y)-ls;
-		w=Query(y)+1;
-		if(i==q)
-			return w;
-		Update(y,w);
-	}
-	return -1;
-}
-
-int main()
-{
-	scanf("%d%*d%*d%*d%*d%*d",&n);
+	for(int i=1;i<=tot;++i)
+		ls[++ed]=p[i];
+	sort(ls+1,ls+ed+1,Cmpy);
+	for(int i=1;i<=tot;++i)
+		p[i].y=lower_bound(ls+1,ls+ed+1,p[i],Cmpy)-ls;
+	static int C[N];
 	for(int i=1;i<=n;++i)
 	{
-		scanf("%d%d",&p[i].x,&p[i].y);
-		p[i].id=i;
+		int &r=dp[i];
+		for(int j=p[i].y;j;j-=j&(-j))
+			GetMax(r,C[j]);
+		++r;
+		for(int j=p[i].y;j<=ed;++j)
+			GetMax(C[j],r);
+		A.Update(p[i].x,r);
+		B.Update(p[i].y,r);
+		Sx.insert(Pir(p[i].x,i));
+		Sy.insert(Pir(p[i].y,i));
 	}
-	scanf("%d",&m);
-	for(int i=1,op,x,y;i<=m;++i)
+}
+
+void Update(bool fl,const int id)
+{
+	Vector nw=p[id];
+	static int lst[N],ed;
+	if(fl)
 	{
-		scanf("%d%d",&op,&x);
-		if(op==1)
-			printf("%d\n",Cxt(x));
-		else
+		set<Pir>::iterator it=Sy.upper_bound(Pir(nw.y,INF));
+		ed=0;
+		for(int t;it!=Sy.end();++it)
 		{
-			scanf("%d",&y);
-			++n;
-			p[n]=(Data){x,y,n};
+			lst[++ed]=t=it->sec;
+			A.Update(p[t].y,dp[t]);
+		}
+		int &r=dp[id];
+		A.Update(nw.x,r=A.Query(nw.y));
+		B.Update(nw.x,
+		for(int i=1;i<=ed;++i)
+		{
+			A.Update(p[lst[i]].x,dp[lst[i]]=A.Query(p[lst[i]].x));
+			B.Update(p[lst[i]].x,dp[lst[i]]);
 		}
 	}
+	else
+	{
+	}
+}
+
+signed main()
+{
+	scanf("%lld%lld",&n,&ki);
+	u0.Read();
+	v0.Read();
+	for(int i=1;i<=n;++i)
+	{
+		p[i].Read();
+		Trans(p[i]);
+	}
+	tot=n;
+	scanf("%lld",&m);
+	for(int i=1,op;i<=m;++i)
+	{
+		scanf("%lld",&op);
+		if(op==1)
+		{
+			scanf("%lld",que+i);
+			que[i]*=-1;
+		}
+		else
+		{
+			p[que[i]=++tot].Read();
+			Trans(p[tot]);
+			fl[tot]=(op==2);
+		}
+	}
+	Prework();
+	//for(int i=1;i<=tot;++i)
+	//	Whats(p[i]);
+	for(int i=1;i<=m;++i)
+		if(que[i]<0)
+			printf("%lld\n",dp[-que[i]]);
+		else
+			Update(fl[que[i]],que[i]);
 	return 0;
 }

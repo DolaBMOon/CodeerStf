@@ -36,101 +36,99 @@ const int INF=0x3f3f3f3f3f3f3f3f;
 
 struct Edge
 {
-	int v,cap,cost;
+	int v,c;
 }edges[M];
 
-int n,a[N];
-int fir[N],nxt[N],tote=1;
+int cur[N],fir[N],nxt[M],tote=1;
 
-void Adde(int u,int v,int cap,int cost)
+void Adde(int u,int v,int c)
 {
-	edges[++tote]=(Edge){v,cap,cost};
+	//cout<<u<<","<<v<<":"<<c<<endl;
+	edges[++tote]=(Edge){v,c};
 	nxt[tote]=fir[u];
 	fir[u]=tote;
-	edges[++tote]=(Edge){u,0,-cost};
+	edges[++tote]=(Edge){u,0};
 	nxt[tote]=fir[v];
 	fir[v]=tote;
 }
 
-bool inq[N];
-int d[N],cur[N];
+int n,a[N],ans;
+int d[N];
 
-bool Spfa()
+bool Bfs()
 {
+	memset(d,0,sizeof d);
+	d[S]=1;
 	static queue<int> Q;
-	memset(d,0x3f,sizeof d);
 	Q.push(S);
 	while(!Q.empty())
 	{
 		int u=Q.front();
 		Q.pop();
-		inq[u]=false;
 		for(int i=fir[u];i;i=nxt[i])
 		{
 			Edge &e=edges[i];
-			if(e.cap&&d[e.v]>d[u]+e.cost)
+			if(e.c&&!d[e.v])
 			{
-				d[e.v]=d[u]+e.cost;
-				if(!inq[e.v])
-				{
-					Q.push(e.v);
-					inq[e.v]=true;
-				}
+				d[e.v]=d[u]+1;
+				Q.push(e.v);
 			}
 		}
 	}
-	return d[T]<0;
+	return d[T];
 }
 
 int Dfs(int u,int a=INF)
 {
 	if(u==T||!a)
 		return a;
-	inq[u]=true;
 	int f=0,af;
 	for(int &i=cur[u];i;i=nxt[i])
 	{
 		Edge &e=edges[i];
-		if(!inq[e.v]&&d[e.v]==d[u]+e.cost&&(af=Dfs(e.v,min(a,e.cap))))
+		if(d[e.v]==d[u]+1&&(af=Dfs(e.v,min(e.c,a))))
 		{
 			f+=af;
 			a-=af;
-			e.cap-=af;
-			edges[i^1].cap+=af;
+			e.c-=af;
+			edges[i^1].c+=af;
+			if(!a)
+				break;
 		}
 	}
-	inq[u]=false;
 	return f;
 }
 
-int MinCost()
+int MaxFlow()
 {
-	int res=0;
-	while(Spfa())
+	int f=0;
+	while(Bfs())
 	{
-		memcpy(cur,fir,sizeof(cur));
-		res+=Dfs(S)*d[T];
+		memcpy(cur,fir,sizeof fir);
+		f+=Dfs(S);
 	}
-	return res;
+	return f;
 }
 
 signed main()
 {
 	scanf("%lld",&n);
-	int ans=0;
 	for(int i=1;i<=n;++i)
 	{
 		scanf("%lld",a+i);
-		ans+=a[i];
+		if(a[i]>0)
+		{
+			ans+=a[i];
+			Adde(i,T,a[i]);
+		}
+		else
+			Adde(S,i,-a[i]);
 	}
-	for(int i=1;i<=n;++i)
-		Adde(S,i,INF,0);
-	for(int i=1;i<=n;++i)
-		for(int j=i;j<=n;j+=i)
-			Adde(i,n+j,INF,0);
-	for(int i=1;i<=n;++i)
-		Adde(n+i,T,1,a[i]);
-	ans-=MinCost();
+	for(int i=1;i<=n;++i)if(a[i]<0)
+		for(int j=i;j<=n;j+=i)if(a[j]>0)
+			Adde(i,j,INF);
+	//Whats(ans);
+	ans-=MaxFlow();
 	printf("%lld",ans);
 	return 0;
 }
