@@ -29,6 +29,7 @@ const int _B=1e6;
 
 char Nc()
 {
+	return getchar();
 	static char buf[_B],*p=buf,*q=buf;
 	return ((p==q)&&(q=buf+fread(buf,1,_B,stdin))==(p=buf))?0:*(p++);
 }
@@ -52,7 +53,7 @@ int Find(int x)
 {
 	int res=-1;
 	for(int left=0,mid,right=ed;left<=right;)
-		if(x-s[lst[mid=(left+right)>>1]]>=0)
+		if(x-s[lst[mid=(left+right)>>1]]>0)
 			right=(res=mid)-1;
 		else
 			left=mid+1;
@@ -86,6 +87,6 @@ int main()
 			left=(res=mid)+1;
 		else
 			right=mid-1;
-	printf("%d",res);
+	printf("%d\n",res);
 	return 0;
 }

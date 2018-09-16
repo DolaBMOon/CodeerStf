@@ -71,9 +71,9 @@ int Lca(int x,int y)
 }
 
 vector<int> A[N],Q[N];
-int cnt[N],d[N],lz[N<<2],mx[N<<2],ki[N],ans[N];
+int cnt[N],d[N],lz[20*N],mx[20*N],ki[N],ans[N];
 
-void Add(int q,int w,int o=1,int l=1,int r=n)
+void Add(int q,int w,int& o=1,int l=1,int r=n)
 {
 	mx[o]+=w;
 	if(q<=l)
@@ -84,8 +84,7 @@ void Add(int q,int w,int o=1,int l=1,int r=n)
 	int mid=(l+r)>>1;
 	if(q<=mid)
 		Add(q,w,o<<1,l,mid);
-	else
-		Add(q,w,(o<<1)^1,mid+1,r);
+	Add(q,w,(o<<1)^1,mid+1,r);
 }
 
 int Query(int k,int o=1,int l=1,int r=n)
@@ -111,6 +110,7 @@ void Dfs(int u,int fa=0)
 	for(int i=0,id;i<(int)Q[u].size();++i)
 	{
 		id=Q[u][i];
+		Whats(mx[1]);
 		if(mx[1]<ki[id])
 			ans[id]=0;
 		else
@@ -125,7 +125,7 @@ void Dfs(int u,int fa=0)
 void Doit(int u,int f)
 {
 	A[u].push_back(dep[f]);
-	for(int i=B-1;~i;--i)if(dep[st[u][i]>dep[f]])
+	for(int i=B-1;~i;--i)if(dep[st[u][i]]>dep[f])
 		u=st[u][i];
 	++d[u];
 }

@@ -25,9 +25,21 @@ template<typename T> void GetMax(T &a,T b)
 	 -<Unlimited Blade Works>-
  */
 
-int n,m;
+int n,m,q;
 
 int main()
 {
+	srand((unsigned long long)new char);
+	n=5;
+	m=rand()%n+1;
+	q=rand()%m+1;
+	cout<<n<<" "<<m<<endl;
+	for(int i=2;i<=n;++i)
+		cout<<rand()%(i-1)+1<<" "<<i<<endl;
+	for(int i=1;i<=m;++i)
+		cout<<rand()%n+1<<" "<<rand()%n+1<<endl;
+	cout<<q<<endl;
+	for(int i=1;i<=q;++i)
+		cout<<rand()%n+1<<" "<<rand()%m+1<<endl;
 	return 0;
 }

@@ -29,10 +29,11 @@ int n,len;
 
 int main()
 {
-	n=1e5;
+	srand((unsigned long long)new char);
+	n=5;
 	len=rand()%n+1;
 	cout<<n<<" "<<len<<endl;
 	for(int i=1;i<=n;++i)
-		cout<<rand()%1000000000+1<<" ";
+		cout<<rand()%10+1<<" ";
 	return 0;
 }
