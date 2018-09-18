@@ -1,8 +1,8 @@
-#include<iostream>
-#include<algorithm>
 #include<cstdio>
 #include<cstring>
 #include<cassert>
+#include<iostream>
+#include<algorithm>
 
 using namespace std;
 
@@ -29,13 +29,30 @@ template<typename T> bool GetMax(T &a,T b)
 
 const int N=2e5+10;
 
-int n,x,s[N];
+int n,x;
+int s[N];
 
 signed main()
 {
 	scanf("%lld%lld",&n,&x);
 	for(int i=1;i<=n;++i)
 	{
+		scanf("%lld",s+i);
+		s[i]+=s[i-1];
 	}
+	int ans=0x3f3f3f3f3f3f3f3f;
+	for(int i=1,t;i<=n;++i)
+	{
+		t=i*x;
+		for(int j=n,k,c=1;j>=1;j=k,++c)
+		{
+			k=max(0ll,j-i);
+			t+=(s[j]-s[k])*max(5ll,(c*2+1));
+			if(t>=ans)
+				break;
+		}
+		GetMin(ans,t);
+	}
+	printf("%lld",ans+n*x);
 	return 0;
 }
