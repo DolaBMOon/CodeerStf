@@ -38,7 +38,7 @@ Pir p[N];
 
 bool Rd(int k)
 {
-	return rand()%1000+1<=k;
+	return rand()%100+1<=k;
 }
 
 double Sqr(double x)
@@ -57,6 +57,7 @@ double Calc()
 
 int main()
 {
+	srand((unsigned long long)new char);
 	scanf("%d",&n);
 	for(int i=1;i<=n;++i)
 	{
@@ -72,19 +73,28 @@ int main()
 	double ans=0;
 	for(int k=0;k<=100;++k)
 	{
-		for(int cc=1;cc<=1000;++cc)
+		for(int cc=1;cc<=10;++cc)
 		{
 			random_shuffle(p+1,p+m+1);
 			for(int i=1;i<=n;++i)
 				win[i]=ori[i];
 			for(int i=1;i<=m;++i)
 			{
-				if(Rd(k)^(win[p[i].fir]>p[i].sec))
-					++win[p[i].fir];
-				else
-					++win[p[i].sec];
+				if(Rd(k))
+					swap(p[i].fir,p[i].sec);
+				++win[p[i].fir];
 			}
-			GetMax(ans,Calc());
+			for(int gg=1;gg<=100;++gg)
+			{
+				for(int i=1;i<=m;++i)
+					if((win[p[i].fir]<win[p[i].sec])^Rd(k))
+					{
+						--win[p[i].fir];
+						++win[p[i].sec];
+						swap(p[i].fir,p[i].sec);
+					}
+				GetMax(ans,Calc());
+			}
 		}
 	}
 	printf("%.17lf",ans);
