@@ -19,7 +19,6 @@ Min_25, dujiaoshai
 Learn BP
 一个数约数个数
 https://www.luogu.org/problemnew/show/P2603
-int_fast32_t
 http://codeforces.com/blog/entry/61587
 https://codeforces.com/blog/entry/45855
 https://console.cloud.google.com/freetrial/signup/0
@@ -28,3 +27,7 @@ Spfa optimization
 https://codeforces.com/blog/entry/51275
 CF 997 D
 half plane
+pollard_rho
+https://loj.ac/problem/6061
+POI -loj2450
+luangao for 1001D

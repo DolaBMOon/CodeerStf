@@ -1,8 +1,8 @@
-#include<iostream>
-#include<algorithm>
 #include<cstdio>
 #include<cstring>
 #include<cassert>
+#include<iostream>
+#include<algorithm>
 
 using namespace std;
 
@@ -11,30 +11,22 @@ using namespace std;
 #define DivHer() cout<<"<<<<<<<<<<<<<<<"<<endl
 #define Oops() cout<<"!!!!!!!!!!!!!!!"<<endl
 
-template<typename T> void GetMin(T &a,T b)
+template<typename T> bool GetMin(T &a,T b)
 {
-	a=((a<b)?a:b);
+	return ((a<=b)?false:(a=b,true));
 }
 
-template<typename T> void GetMax(T &a,T b)
+template<typename T> bool GetMax(T &a,T b)
 {
-	a=((a>b)?a:b);
+	return ((a>=b)?false:(a=b,true));
 }
 
 /*
 	 -<Unlimited Blade Works>-
  */
 
-#define int long long
-
-const int N=2e5+10;
-
-int n,p[N];
-
 int main()
 {
-	for(int i=1;i<=n;++i)
-	{
-	}
+	puts("Impossible");
 	return 0;
 }
