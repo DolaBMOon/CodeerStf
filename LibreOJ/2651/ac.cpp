@@ -1,37 +1,40 @@
-#include<cmath>
-#include<cstdio>
-#include<cstdlib>
-#include<cstring>
-#include<iostream>
-#include<algorithm>
-#define N 100100
+#include <bits/stdc++.h>
+#define cap 1000009
 using namespace std;
-struct P{int x,y;}e[N];
-int s[N*3],r[N*3],n,ans,mx,id,T;
-int sqr(int x){return x*x;}
-int dis(int a,int b){
-	return sqr(e[a].x-e[b].x)+sqr(e[a].y-e[b].y);
-}
-int cro(int a,int b,int c){
-	return (e[b].x-e[a].x)*(e[c].y-e[a].y)-(e[c].x-e[a].x)*(e[b].y-e[a].y);
+int a[400007],b[400007],x[100007],y[100007],m1[400007],ha1[400007],hb1[400007];
+bool check(int p,int q,int s,int t){
+    if(p<s)return (((ha1[q]*m1[t-q])-(ha1[p-1]*m1[s-p]))==(hb1[t]-hb1[s-1]));
+    else return ((ha1[q]-ha1[p-1])==((hb1[t]*m1[q-t])-(hb1[s-1]*m1[p-s])));
 }
 int main(){
-	scanf("%d",&T);
-	while (T--){
-		scanf("%d",&n);
-		for (int i=0;i<n;i++)
-			scanf("%d%d",&e[i].x,&e[i].y);
-		for (int i=0;i<n;i++) s[i*2+1]=dis(i,(i+1)%n);
-		for (int i=0;i<n;i++) s[i*2]=cro(i,(i-1+n)%n,(i+1)%n);
-		for (int i=0;i<n;i++) s[i+n*2]=s[i];
-		ans=mx=id=0;
-		memset(r,0,sizeof(r));
-		for (int i=0;i<n*3;i++){
-			if (mx>i) r[i]=min(mx-i,r[2*id-i]); else r[i]=1;
-			while (i-r[i]>=0&&i+r[i]<3*n&&s[i+r[i]]==s[i-r[i]]) r[i]++;
-			if (i+r[i]>mx) mx=i+r[i],id=i;
-			if (r[i]>=n+1) ans++;
-		}
-		printf("%d\n",ans);
-	}
+    int T;
+    cin >>T;
+    while(T--){
+        int n,kk,ll;
+        scanf("%d",&n);
+        for(int i=0;i<n;i++)scanf("%d%d",&x[i],&y[i]); 
+        for(int i=0;i<n;i++)
+            a[i*2+1]=(x[(i+1)%n]-x[i%n])*(x[(i+1)%n]-x[i%n])+(y[(i+1)%n]-y[i%n])*(y[(i+1)%n]-y[i%n]),
+            a[i*2+2]=(x[(i+1)%n]-x[i%n])*(y[(i+2)%n]-y[i%n])-(x[(i+2)%n]-x[i%n])*(y[(i+1)%n]-y[i%n]);
+        for(int i=n;i<2*n;i++)a[i*2+1]=a[(i-n)*2+1],a[i*2+2]=a[(i-n)*2+2];
+        for(int i=0;i<n;i++){
+            int j=n-i;
+            b[i*2+1]=(x[j%n]-x[(j-1+n)%n])*(x[j%n]-x[(j-1+n)%n])+(y[j%n]-y[(j-1+n)%n])*(y[j%n]-y[(j-1+n)%n]);
+            b[i*2+2]=(x[(j-1+n)%n]-x[(j-2+n)%n])*(y[j%n]-y[(j-2+n)%n])-(x[j%n]-x[(j-2+n)%n])*(y[(j-1+n)%n]-y[(j-2+n)%n]);
+        }
+        for(int i=n;i<2*n;i++)
+            b[i*2+1]=b[(i-n)*2+1],
+            b[i*2+2]=b[(i-n)*2+2];
+        m1[0]=1;
+        for(int i=1;i<=4*n;i++) m1[i]=(m1[i-1]*cap);
+        for(int i=1;i<=4*n;i++){
+            ha1[i]=(ha1[i-1]+(a[i]*m1[i])),
+            hb1[i]=(hb1[i-1]+(b[i]*m1[i]));
+        }
+        int dem=0,len=n-1;
+        for(int i=1;i<=2*n;i++)
+            if(check(i,i+len-1,2*n+2-i,2*n-i+1+len)) dem++;
+        cout << dem/2 << endl;
+    }
+    return 0;
 }
