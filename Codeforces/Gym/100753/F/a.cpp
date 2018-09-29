@@ -33,6 +33,30 @@ LL n;
 bool vis[M];
 int p[M],totp,m;
 
+namespace PriTster
+{
+
+	LL Mul(LL x,LL y,LL mo)
+	{
+		LL tmp=(x*y-(LL)((long double)x/mo*y+1.0e-8)*mo);
+		return (tmp<0)?(tmp+mo):tmp;
+	}
+
+	bool MiR(LL x)
+	{
+		LL o=rand(),y=x-1,ed=x-1;
+		for(;!(y&1);y>>=1);
+		LL t=y;
+		for(;t;t>>=1,o=Mul(o,o,mo))if(t&1)
+	}
+
+	bool isP(LL x)
+	{
+		return x%2==0||x%3==0||x%5==0||x%7==0||MiR(x)||MiR(x)||MiR(x);
+	}
+
+}
+
 int main()
 {
 	scanf("%lld",&n);
@@ -48,6 +72,8 @@ int main()
 				break;
 		}
 	}
+		{
+		}
 	int res=1;
 	for(int i=1,cnt;i<=totp;++i)
 	{
