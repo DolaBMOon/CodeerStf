@@ -25,45 +25,23 @@ template<typename T> bool GetMax(T &a,T b)
 	 -<Unlimited Blade Works>-
  */
 
-const int N=1e6+10;
-const int MOD=1e9+7;
+const int N=520;
 
-int U(int x,int y)
+int cnt[4];
+
+void Work()
 {
-	return (x+=y)>=MOD?x-MOD:x;
+	//int 
+	for(int i=1;i<=n;++i)
+	{
+	}
 }
-
-void SU(int &x,int y)
-{
-	(x+=y)>=MOD?x-=MOD:0;
-}
-
-int D(int x,int y)
-{
-	return (x-=y)<0?x+MOD:x;
-}
-
-void SD(int &x,int y)
-{
-	(x-=y)<0?x+=MOD:0;
-}
-
-int n,f[N];
-long long x[N];
 
 int main()
 {
-	scanf("%d%*d",&n);
-	for(int i=1;i<=n;++i)
-		scanf("%lld",x+i);
-	f[0]=1;
-	for(int i=1,l=1,r=1;i<=n;++i)
-	{
-		for(;r<n&&x[r+1]<x[i]+n;++r);
-		for(;l<n&&x[l]+n<x[i];++l);
-		SU(f[i],U(f[i-1],f[i-1]));
-		SD(f[r],f[l-1]);
-	}
-	printf("%d",f[n]);
+	int T;
+	scanf("%d",&T);
+	while(T--)
+		Work();
 	return 0;
 }
