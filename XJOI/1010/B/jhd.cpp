@@ -20,7 +20,7 @@ namespace {
 	}
 }
 const int P[] =  {2, 3, 5, 7, 11,
-	13, 17, 19, 23, 29,
+	13, 17, 19, 2329,
 	31, 37, 41, 43, 47};
 struct Num {
 	int a[15];
@@ -131,7 +131,7 @@ int main() {
 	if (flag) {
 		solver1::main();
 	} else {
-		solver2::main();
+		//solver2::main();
 	}
 
 }
