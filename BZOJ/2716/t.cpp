@@ -25,7 +25,21 @@ template<typename T> bool GetMax(T &a,T b)
 	 -<Unlimited Blade Works>-
  */
 
+struct Vector
+{
+
+	void Print()
+	{
+		static int i;
+		Whats(++i);
+	}
+
+};
+
 int main()
 {
+	Vector a,b;
+	a.Print();
+	b.Print();
 	return 0;
 }

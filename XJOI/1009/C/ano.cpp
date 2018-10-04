@@ -82,7 +82,6 @@ bool Infinity(double d, Point y) {
 }
 
 bool Solve(double d) {
-
 	if(Sqr(Cx.p.x - Cy.p.x) + Sqr(Cx.p.y - Cy.p.y) > Sqr(Cx.r + Cy.r + d) && In(S, Cx) == In(T, Cy)) return 0;
 	if(Infinity(d, S)) return Infinity(d, T);
 	return st.find(T) != st.end();
