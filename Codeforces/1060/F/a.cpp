@@ -30,16 +30,43 @@ const int N=55;
 
 int n;
 vector<int> G[N];
-double dp[N][N];
+double dp[N][N],jc[N];
+
+double C(int n,int m)
+{
+	return jc[n]/(jc[m]*jc[n-m]);
+}
 
 void Dfs(int u,int fa=0)
 {
-	for(int v:
+	f[u][1]=1;
+	for(int v:G[u])if(v!=fa)
+	{
+		Dfs(v,u);
+		static double f[N];
+		memset(f,0,sizeof f);
+		for(int i=0;i<=n;++i)
+		{
+			for(int j=0;i+j<=n;++j)
+			{
+				f[i+j]=dp[u][i]*dp[u][j]*C(i+j,i);
+			}
+		}
+		memcpy(dp[u],f,sizeof f);
+	}
+}
+
+void Prework()
+{
+	jc[0]=1;
+	for(int i=1;i<=n;++i)
+		jc[i]=jc[i-1]*i;
 }
 
 int main()
 {
 	scanf("%d",&n);
+	Prework();
 	for(int i=1,u,v;i<=n;++i)
 	{
 		scanf("%d%d",&u,&v);
@@ -49,7 +76,7 @@ int main()
 	for(int i=1;i<=n;++i)
 	{
 		Dfs(i);
-		printf("%.11lf\n",dp[i][n-1]);
+		printf("%.11lf\n",dp[i][n]);
 	}
 	return 0;
 }
