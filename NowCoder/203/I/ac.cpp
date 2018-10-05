@@ -1,8 +1,4 @@
-#include<cstdio>
-#include<cstring>
-#include<queue>
-#include<vector>
-#include<algorithm>
+#include<bits/stdc++.h>
 #define LL long long
 #define INF 0x3f3f3f3f3f3f3f3fll
 #define N 200010
@@ -57,11 +53,14 @@ int main()
 	dijkstra();
 	for(int i=1;i<=n;i++) ans[i]=INF;
 	for(int i=1;i<=n;i++)
+	{
+		cout<<i<<":"<<f[i]<<endl;
 		for(int j=0;j<g[i].size();j++)
 		{
 			int y=g[i][j].y,w=g[i][j].w;
 			if (f[i]!=f[y]) ans[f[i]]=min(ans[f[i]],d[y]+d[i]+w);
 		}
+	}
 	for(int i=1;i<=s;i++)
 		printf("%lld%c",ans[a[i]]," \n"[i==s]);
 	return 0;
