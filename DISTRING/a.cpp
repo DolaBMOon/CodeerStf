@@ -26,37 +26,36 @@ template<typename T> bool GetMax(T &a,T b)
 	 -<Unlimited Blade Works>-
  */
 
-const int N=2e5+10;
+const int N=1000+10;
 
-int p[N],totp;
-bool vis[N];
-vector<int> D[N];
-
-void Prework()
-{
-	for(int i=2;i<N;++i)
-	{
-		if(!vis[i])
-			p[++totp]=i;
-		for(int j=1;j<=totp&&p[j]*i<N;++j)
-		{
-			vis[p[j]*i]=true;
-			if(i%p[j]==0)
-				break;
-		}
-	}
-	for(int i=1;i<=totp;++i)
-		for(int j=p[i];j<N;j+=p[i])
-			D[j].emplace_back(i);
-}
-
-int n,a[N];
+int n,m;
+bool sf;
+vector<int> G[N];
 
 int main()
 {
-	Prework();
-	scanf("%d",&n);
-	for(int i=1;i<=n;++i)
-		scanf("%d",a+i);
+	scanf("%d%d",&n,&m);
+	if(n>m)
+	{
+		swap(n,m);
+		sf=true;
+	}
+	for(int i=0;i<n;++i)
+		G[i].resize(m);
+	if(sf)
+	{
+		for(int j=0;j<m;++j)
+			for(int i=0;i<n;++i)
+				scanf("%d",&G[i][j]);
+	}
+	else
+	{
+		for(int i=0;i<n;++i)
+			for(int j=0;j<m;++j)
+				scanf("%d",&G[i][j]);
+	}
+	for(int i=0;i<m;++i)
+	{
+	}
 	return 0;
 }

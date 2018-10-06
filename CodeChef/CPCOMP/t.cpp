@@ -26,9 +26,14 @@ template<typename T> bool GetMax(T &a,T b)
 	 -<Unlimited Blade Works>-
  */
 
+#define Pir pair<int,int>
+#define fir first
+#define sec second
+
 const int N=2e5+10;
 
-int n,A[N],ans;
+int n,ans;
+Pir p[N];
 
 int Gcd(int x,int y)
 {
@@ -58,8 +63,19 @@ int main()
 	scanf("%d",&n);
 	ans=n;
 	for(int i=1;i<=n;++i)
-		scanf("%d",A+i);
-	sort(A+1,A+n+1);
+	{
+		scanf("%d",&p[i].fir);
+		p[i].sec=i;
+	}
+	sort(p+1,p+n+1);
+	for(int i=1;i<n;++i)if(Gcd(p[i].fir,p[i+1].fir)==1)
+		Hb(p[i].sec,p[i+1].sec);
+	for(int cc=50;cc--;)
+	{
+		random_shuffle(p+1,p+n+1);
+		for(int i=1;i<n;++i)if(Gcd(p[i].fir,p[i+1].fir)==1)
+			Hb(p[i].sec,p[i+1].sec);
+	}
 	printf("%d",ans);
 	return 0;
 }
