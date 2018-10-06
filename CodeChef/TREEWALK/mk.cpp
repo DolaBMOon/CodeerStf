@@ -29,7 +29,7 @@ int n;
 
 int main()
 {
-	n=3000;
+	n=30;
 	cout<<n<<endl;
 	for(int i=2;i<=n;++i)
 		cout<<rand()%(i-1)+1<<" "<<i<<endl;
