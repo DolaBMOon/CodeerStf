@@ -3,7 +3,7 @@
 #include<cassert>
 #include<iostream>
 #include<algorithm>
-#include<cmath>
+#include<vector>
 
 using namespace std;
 
@@ -26,48 +26,37 @@ template<typename T> bool GetMax(T &a,T b)
 	 -<Unlimited Blade Works>-
  */
 
-#define Gcd(x,y) __gcd(x,y)
-
 const int N=2e5+10;
-const int M=100;
 
-int n,ans,m,a[N],fa[N];
+int p[N],totp;
+bool vis[N];
+vector<int> D[N];
 
-int Find(int x)
+void Prework()
 {
-	return fa[x]?(fa[x]=Find(fa[x])):x;
-}
-
-void Hb(int x,int y)
-{
-	x=Find(x);
-	y=Find(y);
-	if(x!=y)
+	for(int i=2;i<N;++i)
 	{
-		fa[x]=y;
-		--ans;
+		if(!vis[i])
+			p[++totp]=i;
+		for(int j=1;j<=totp&&p[j]*i<N;++j)
+		{
+			vis[p[j]*i]=true;
+			if(i%p[j]==0)
+				break;
+		}
 	}
+	for(int i=1;i<=totp;++i)
+		for(int j=p[i];j<N;j+=p[i])
+			D[j].emplace_back(i);
 }
+
+int n,a[N];
 
 int main()
 {
+	Prework();
 	scanf("%d",&n);
-	ans=n;
 	for(int i=1;i<=n;++i)
 		scanf("%d",a+i);
-	random_shuffle(a+1,a+n+1);
-	for(int i=1;i<=n;++i)
-	{
-		int d=a[i],j;
-		for(j=i+1;d!=1&&j<=n;++j)
-			d=Gcd(d,a[j]);
-		if(d==1)
-		{
-			for(int k=i;k<=j;++k)
-				for(int l=k+1;l<=j;++l)if(Gcd(a[k],a[l])==1)
-					Hb(k,l);
-		}
-	}
-	printf("%d",ans);
 	return 0;
 }
