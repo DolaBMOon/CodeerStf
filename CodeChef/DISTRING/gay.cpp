@@ -7,8 +7,11 @@
 #include<algorithm>
 #include<map>
 #include<vector>
+//#include<ext/pb_ds/assoc_container.hpp>
+//#include<ext/pb_ds/hash_policy.hpp>
 
 using namespace std;
+//using namespace __gnu_pbds;
 
 #define Whats(x) cout<<#x<<" is "<<(x)<<endl
 #define Divhim() cout<<">>>>>>>>>>>>>>>"<<endl
@@ -32,11 +35,11 @@ template<typename T> bool GetMax(T &a,T b)
 #define H unsigned long long
 
 const int N=500000+10;
-const int MIN=1000;
+const int MIN=5000;
 
-const H D=2777777777777ll;
+const H D=2777777;
 
-const int _B=1e6+10;
+const int _B=3e6+10;
 
 char Nc()
 {
@@ -96,7 +99,6 @@ namespace Solver1
 
 namespace Solver2
 {
-
 	map<H,int> mp;
 	H pw[MIN];
 	vector<H> G0[MIN];
@@ -124,7 +126,7 @@ namespace Solver2
 					if(l)
 						x-=G0[l-1][i]*pw[r-l+1];
 					int &j=mp[x];
-					ans+=(i-j+1)*(n-i);
+					ans+=1llu*(i-(j-1))*(n-i);
 					j=i+1;
 				}
 			}
@@ -142,7 +144,7 @@ int main()
 	for(int i=0;i<n;++i)
 		for(int j=0;j<m;++j)
 			G[i][j]=Read();
-	if(n<=m)
+	if((H)n*n*m<=1000000000)
 		Solver1::Work();
 	else
 		Solver2::Work();

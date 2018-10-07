@@ -32,11 +32,9 @@ template<typename T> bool GetMax(T &a,T b)
 #define H unsigned long long
 
 const int N=500000+10;
-const int MIN=1000;
+const int MIN=5000;
 
-const H D=2777777777777ll;
-
-const int _B=1e6+10;
+const int _B=3e6+10;
 
 char Nc()
 {
@@ -97,38 +95,8 @@ namespace Solver1
 namespace Solver2
 {
 
-	map<H,int> mp;
-	H pw[MIN];
-	vector<H> G0[MIN];
-
 	void Work()
 	{
-		pw[0]=1;
-		for(int i=1;i<=m;++i)
-			pw[i]=pw[i-1]*D;
-		for(int i=0;i<m;++i)
-			G0[i].resize(n);
-		for(int i=0;i<n;++i)
-			for(int j=0;j<m;++j)
-				G0[j][i]=G[i][j];
-		for(int i=0;i<n;++i)
-			for(int j=1;j<m;++j)
-				G0[j][i]=G0[j-1][i]*D+G0[j][i];
-		for(int l=0;l<m;++l)
-			for(int r=l;r<m;++r)
-			{
-				mp.clear();
-				for(int i=0;i<n;++i)
-				{
-					H x=G0[r][i];
-					if(l)
-						x-=G0[l-1][i]*pw[r-l+1];
-					int &j=mp[x];
-					ans+=(i-j+1)*(n-i);
-					j=i+1;
-				}
-			}
-		printf("%llu\n",ans);
 	}
 
 }
@@ -142,7 +110,7 @@ int main()
 	for(int i=0;i<n;++i)
 		for(int j=0;j<m;++j)
 			G[i][j]=Read();
-	if(n<=m)
+	if((H)n*n*m<=1000000000)
 		Solver1::Work();
 	else
 		Solver2::Work();

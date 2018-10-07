@@ -7,8 +7,11 @@
 #include<algorithm>
 #include<map>
 #include<vector>
+#include<ext/pb_ds/assoc_container.hpp>
+#include<ext/pb_ds/hash_policy.hpp>
 
 using namespace std;
+using namespace __gnu_pbds;
 
 #define Whats(x) cout<<#x<<" is "<<(x)<<endl
 #define Divhim() cout<<">>>>>>>>>>>>>>>"<<endl
@@ -96,8 +99,7 @@ namespace Solver1
 
 namespace Solver2
 {
-
-	map<H,int> mp;
+	cc_hash_table<H,int> mp;
 	H pw[MIN];
 	vector<H> G0[MIN];
 
@@ -142,7 +144,7 @@ int main()
 	for(int i=0;i<n;++i)
 		for(int j=0;j<m;++j)
 			G[i][j]=Read();
-	if(n<=m)
+	if((long long)n*n*m<=200000000)
 		Solver1::Work();
 	else
 		Solver2::Work();
