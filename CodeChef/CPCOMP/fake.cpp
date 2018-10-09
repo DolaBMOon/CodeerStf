@@ -6,6 +6,7 @@
 #include<iostream>
 #include<algorithm>
 #include<vector>
+#include<map>
 
 using namespace std;
 
@@ -117,8 +118,9 @@ int Read()
 
 const int N=2e5+10;
 
-int n,ans,fa[N],a[N];
+int n,ans,fa[N],a[N],cnt[N];
 Pir p[N];
+bool vis[N];
 
 int Find(int x)
 {
@@ -135,22 +137,8 @@ void Work()
 		for(int k=j-1,x;k>=i;--k)if((x=Find(p[k].sec))!=y&&Gcd(p[k].fir,p[j].fir)==1)
 		{
 			fa[x]=y;
+			vis[x]=vis[y]=true;
 			--ans;
-		}
-	}
-}
-
-vector<int> G[N];
-int sz[N];
-
-void Prework()
-{
-	for(int i=1;i<=n;++i)
-		G[a[i]].emplace_back(a[i]);
-	for(int i=2;i<N;++i)
-	{
-		for(int j=i;j<N;j+=i)
-		{
 		}
 	}
 }
@@ -160,23 +148,29 @@ int main()
 	srand(12345);
 	ZJN::Prework();
 	n=Read();
-	ans=n;
 	for(int i=1;i<=n;++i)
 	{
-		p[i].fir=a[i]=Read();
-		p[i].sec=i;
+		++cnt[a[i]=Read()];
 		if(a[i]==1)
 		{
 			puts("1");
 			return 0;
 		}
 	}
-	Prework();
-	for(int cc=29;--cc;)
+	sort(a+1,a+n+1);
+	ans=n=unique(a+1,a+n+1)-a-1;
+	for(int i=1;i<=n;++i)
+	{
+		p[i].fir=a[i];
+		p[i].sec=i;
+	}
+	while(1.0*clock()/CLOCKS_PER_SEC<=0.40)
 	{
 		random_shuffle(p+1,p+n+1);
 		Work();
 	}
+	for(int i=1;i<=n;++i)if(!vis[i])
+		ans+=cnt[a[i]]-1;
 	printf("%d",ans);
 	return 0;
 }
