@@ -1,23 +1,24 @@
-from numpy import *
+import numpy as np
 
 MOD=998244353
 
 n=int(input())
 
-A=zeros((n,n),int64)
+A=np.zeros((n,n),dtype=np.int64)
 
-for i in range(1,n):
+for i in range(n-1):
 	u,v=map(int,input().split())
 	u=u-1
 	v=v-1
-	A[u][v]=A[v][u]=1
+	A[u][v]=1
+	A[v][u]=1
 
-rt,ki=map(int,input().split())
+print(A)
 
-B=array([0]*n)
-B[rt-1]=1
+print(A*A*A*A)
 
-B=B*A**ki
-
-for i in range(0,n):
-	print(B[i],end=' ')
+ 
+# rt,ki=map(int,input().split())
+# 
+# for i in range(0,n):
+# 	print(A[rt][i],end=' ')

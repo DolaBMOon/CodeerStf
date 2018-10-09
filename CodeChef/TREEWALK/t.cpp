@@ -25,7 +25,6 @@ void __f(const char* names, Arg1&& arg1, Args&&... args){
 #define trace(...)
 #endif
 
-
 const int g = 3, mod = 998244353, p = 998244353;
 
 inline int add(int x, int y){ x += y; if(x >= mod) x -= mod; return x;}
@@ -227,7 +226,6 @@ int main(){
 	for(int i = 1; i <= k; i++) v.push_back(sub(0, c[i]));;
 	_inv = inverse(v, k + 1);
 	reverse(v.begin(), v.end());
-
 
 	for(int i = 1; i <= 2 * n - 2; i++){
 		for(int j = 1; j <= n; j++){
