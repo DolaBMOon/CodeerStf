@@ -26,15 +26,32 @@ template<typename T> bool GetMax(T &a,T b)
 	 -<Unlimited Blade Works>-
  */
 
-#define Gcd(x,y) __gcd(x,y)
 #define Pir pair<int,int>
 #define fir first
 #define sec second
 
 const int N=2e5+10;
 
+struct FastDiv {
+	FastDiv() {}
+	FastDiv(ull n) : m(n) {
+		s = std::__lg(n - 1);
+		x = ((__uint128_t(1) << (s + 64)) + n - 1) / n;
+	}
+	friend ull operator / (ull n, FastDiv d) { 
+		return (__uint128_t(n) * d.x >> d.s) >> 64; 
+	}
+	friend ull operator % (ull n, FastDiv d) { return n - n / d * d.m; }
+	ull m, x; int s;
+} P;
+
 int n,ans,fa[N];
 Pir p[N];
+
+int Gcd(int x,int y)
+{
+	return y?Gcd(y,
+}
 
 int Find(int x)
 {
