@@ -206,10 +206,14 @@ int main()
 		Nxt();
 		Appendall();
 	}
-	for(int i=1;i<=n;++i)
-	{
-		g[i]=BM(f[i]);
-		printf("%d ",CHSolver::Solve(f[i],g[i],k));
-	}
+	if(k>10000)
+		for(int i=1;i<=n;++i)
+		{
+			g[i]=BM(f[i]);
+			printf("%d ",CHSolver::Solve(f[i],g[i],k));
+		}
+	else
+		for(int i=1;i<=n;++i)
+			printf("%d ",f[i][k]);
 	return 0;
 }
