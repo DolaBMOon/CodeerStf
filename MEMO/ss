@@ -1,0 +1,1 @@
+ssserver -p 8080 -k 19260817 -m aes-256-cfb -d start
