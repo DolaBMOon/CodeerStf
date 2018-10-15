@@ -35,11 +35,9 @@ https://www.cnblogs.com/zzqsblog/p/5927422.html
 use paypal
 XJOI 1009 C
 https://www.cnblogs.com/zzqsblog/p/5543696.html
-回文
 getrusage
 strace
 ptrace
-autossh
 CF 1060 F
 O(1) Gcd
 
@@ -47,7 +45,8 @@ O(1) Gcd
 
 Prufer
 https://codeforces.com/blog/entry/62401
-http://tendency.blog.uoj.ac/blog/3796
 旋转
 https://codeforces.com/blog/entry/62328
 虚树
+弦图
+回文
