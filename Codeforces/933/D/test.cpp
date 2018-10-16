@@ -3,6 +3,7 @@
 #include<cassert>
 #include<iostream>
 #include<algorithm>
+#include<set>
 
 using namespace std;
 
@@ -25,27 +26,13 @@ template<typename T> bool GetMax(T &a,T b)
 	 -<Unlimited Blade Works>-
  */
 
-unsigned int a, b, c;
-
-unsigned int Rand()
-{
-	a^=b^c>>1;
-	b^=a<<5^c>>3;
-	c^=a>>2^b<<4;
-	return a>>2|233;
-}
+set<int> S;
 
 int main()
 {
-	int _p;
-	cin>>a>>b>>c>>_p;
-	const int p=_p;
-	unsigned long long ans=1,ans2=1;
-	for (int i=1000000000;i;i-=64)
-	{
-		ans=ans*Rand()%p;
-		ans2=ans2*Rand()%p;
-	}
-	cout<<ans*ans2%p<<endl;
+	for(int i=1;i<=1000;++i)
+		for(int j=1;j<=1000;++j)
+			S.insert(i*i+j*j);
+	Whats(S.size());
 	return 0;
 }
