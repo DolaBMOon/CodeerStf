@@ -28,8 +28,8 @@ template<typename T> bool GetMax(T &a,T b)
 
 #define int long long
 
-const int N=233;
-const int K=111;
+const int N=2333;
+const int INF=0x3f3f3f3f3f3f3f3f;
 
 int n,ki,a[N],v[N],w,dp[N],q;
 
@@ -42,7 +42,7 @@ void Upd(int a,int v)
 			GetMin(dp[i],dp[j]+k+w);
 }
 
-int ban[K][N];
+int ban[N][N];
 
 signed main()
 {
@@ -64,6 +64,9 @@ signed main()
 		for(int j=1;j<=ki;++j)
 			for(int p=i-a[j],fee=v[j]+w;p>=0&&!(ban[j][i]-(p?ban[j][p-1]:0));p-=a[j],fee+=v[j])
 				GetMin(dp[i],dp[p]+fee);
-	printf("%lld",dp[n]-w);
+	if(dp[n]==INF)
+		puts("-1");
+	else
+		printf("%lld",dp[n]-w);
 	return 0;
 }
