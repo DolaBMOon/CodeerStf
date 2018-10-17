@@ -29,12 +29,13 @@ int n,rt,k;
 
 int main()
 {
-	n=1000;
+	srand((unsigned long long)new char);
+	n=6;
 	cout<<n<<endl;
 	for(int i=2;i<=n;++i)
 		cout<<rand()%(i-1)+1<<" "<<i<<endl;
 	rt=1;
-	k=10000;
+	k=100000000;
 	cout<<rt<<" "<<k<<endl;
 	return 0;
 }

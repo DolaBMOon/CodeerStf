@@ -192,16 +192,22 @@ int main()
 	}
 	scanf("%d%d",&rt,&k);
 	nw[rt]=1;
+	if(n==1)
+	{
+		if(k)
+			puts("0");
+		else
+			puts("1");
+		return 0;
+	}
 	Appendall();
 	for(int i=1;i<N;++i)
 	{
 		Nxt();
 		Appendall();
 	}
+	g[0]=BM(f[1]);
 	for(int i=1;i<=n;++i)
-	{
-		g[i]=BM(f[i]);
-		printf("%d ",CHSolver::Solve(f[i],g[i],k));
-	}
+		printf("%d ",CHSolver::Solve(f[i],g[0],k));
 	return 0;
 }
