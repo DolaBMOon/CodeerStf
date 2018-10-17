@@ -26,7 +26,7 @@ template<typename T> bool GetMax(T &a,T b)
 
 const int MOD=998244353;
 const int Gen=3;
-const int N=3030;
+const int N=6030;
 
 int Mul(int a,int b)
 {
@@ -108,150 +108,40 @@ namespace CHSolver
 {
 
 	int n;
-	vector<int> f,mf;
-
-	void FFT(Poly &A,bool fl)
-	{
-		int L=A.size();
-		if(fl)
-		{
-			int t=Qpow(L);
-			for(int& v:A)
-				v=Mul(v,t);
-			reverse(A.begin()+1,A.end());
-		}
-		for(int i=1,j=L>>1,k;i<L;++i,j^=k)
-		{
-			if(i<j)
-				swap(A[i],A[j]);
-			k=L>>1;
-			while(j&k)
-			{
-				j^=k;
-				k>>=1;
-			}
-		}
-
-		static int w[N]={1};
-
-		for(int i=1;i<L;i<<=1)
-		{
-			int t=Qpow(Gen,(MOD-1)/(i<<1));
-			for(int j=1;j<i;++j)
-				w[j]=Mul(w[j-1],t);
-			for(int j=0;j<L;j+=(i<<1))
-			{
-				for(int k=0;k<i;++k)
-				{
-					t=Mul(A[i+j+k],w[k]);
-					A[i+j+k]=D(A[j+k],t);
-					SU(A[j+k],t);
-				}
-			}
-		}
-	}
-
-	Poly Inv(Poly A)
-	{
-		int L=A.size();
-		if(L==1)
-			return Poly(1,Qpow(A[0]));
-		Poly t=A;
-		t.resize((L+1)>>1);
-		Poly B=Inv(t);
-		int p=1;
-		for(;p<(L<<1);p<<=1);
-		t=A;
-		t.resize(p);
-		FFT(t,false);
-		B.resize(p);
-		FFT(B,false);
-		for(int i=0;i<p;++i)
-			B[i]=Mul(D(2,Mul(t[i],B[i])),B[i]);
-		FFT(B,true);
-		B.resize(L);
-		return B;
-	}
-
-	Poly operator*(Poly A,Poly B)
-	{
-		int need=A.size()+B.size()-1,L;
-		for(L=1;L<need;L<<=1);
-		A.resize(L);
-		FFT(A,false);
-		B.resize(L);
-		FFT(B,false);
-		for(int i=0;i<L;++i)
-			A[i]=Mul(A[i],B[i]);
-		FFT(A,true);
-		A.resize(need);
-		return A;
-	}
-
-	Poly operator/(Poly A,Poly B)
-	{
-		int n=A.size(),m=B.size(),p=1,t=n-m+1;
-		for(;p<(t<<1);p<<=1);
-		reverse(A.begin(),A.end());
-		A.resize(t);
-		reverse(B.begin(),B.end());
-		B.resize(t);
-		A=A*Inv(B);
-		A.resize(t);
-		reverse(A.begin(),A.end());
-		return A;
-	}
-
-	Poly operator-(Poly A,Poly B)
-	{
-		for(int i=B.size()-1;i>=0;--i)
-			SD(A[i],B[i]);
-		return A;
-	}
-
-	ostream& operator<<(ostream &os,const Poly &p)
-	{
-		os<<"{";
-		for(int i=0;i<(int)p.size()-1;++i)
-			os<<p[i]<<",";
-		os<<p.back()<<"}";
-		return os;
-	}
+	vector<int> f,g,h;
 
 	void Muc(vector<int> &A,const vector<int> &B)
 	{
-		A=A*B;
-		(A=A-A/mf*mf).resize(n);
+		static vector<int> t;
+		t.resize(n+n-1);
+		for(int i=0;i<n+n-1;++i)
+			t[i]=0;
+		for(int i=0;i<n;++i)
+			for(int j=0;j<n;++j)
+				SU(t[i+j],Mul(A[i],B[j]));
+
+		for(int i=n+n-2;i>=n;--i)
+			for(int j=1;j<=n;++j)
+				SU(t[i-j],Mul(t[i],f[j-1]));
+
+		for(int i=0;i<n;++i)
+			A[i]=t[i];
 	}
 
-	int Solve(vector<int> v,vector<int> _f,LL m)
+	void Init(vector<int> _f,LL m)
 	{
 		n=(f=_f).size();
-		if(m<(int)v.size())
-			return v[m];
-
-		mf=f;
-		reverse(mf.begin(),mf.end());
-		mf.push_back(1);
-		for(int i=0;i<n;++i)
-			mf[i]=D(0,mf[i]);
 
 		m-=n-1;
-		static vector<int> g,h;
-		g.clear();
-		h.clear();
 		g.resize(n);
 		h.resize(n);
 		g[0]=h[1]=1;
 		for(;m;m>>=1,Muc(h,h))if(m&1)
 			Muc(g,h);
+	}
 
-		int t=v.size();
-		v.resize(n+n-1);
-		for(int i=t;i<n+n-1;++i)
-			for(int j=1;j<=n;++j)
-				SU(v[i],Mul(v[i-j],f[j-1]));
-
+	int Solve(vector<int> v)
+	{
 		int ans=0;
 		for(int i=0;i<n;++i)
 			SU(ans,Mul(g[i],v[n+i-1]));
@@ -260,7 +150,7 @@ namespace CHSolver
 
 }
 
-int n,rt,k,nw[N];
+int n,rt,nw[N];LL k;
 vector<int> G[N],f[N],g;
 
 void Appendall()
@@ -290,7 +180,7 @@ int main()
 		G[u].emplace_back(v);
 		G[v].emplace_back(u);
 	}
-	scanf("%d%d",&rt,&k);
+	scanf("%d%lld",&rt,&k);
 	nw[rt]=1;
 	Appendall();
 	for(int i=1;i<N;++i)
@@ -298,8 +188,17 @@ int main()
 		Nxt();
 		Appendall();
 	}
-	g=BM(f[1]);
-	for(int i=1;i<=n;++i)
-		printf("%d ",CHSolver::Solve(f[i],g,k));
+	if(k<N)
+	{
+		for(int i=1;i<=n;++i)
+			printf("%d ",f[i][k]);
+	}
+	else
+	{
+		g=BM(f[rt]);
+		CHSolver::Init(g,k);
+		for(int i=1;i<=n;++i)
+			printf("%d ",CHSolver::Solve(f[i]));
+	}
 	return 0;
 }
