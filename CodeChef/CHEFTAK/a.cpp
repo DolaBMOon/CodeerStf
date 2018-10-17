@@ -25,16 +25,9 @@ template<typename T> bool GetMax(T &a,T b)
 	 -<Unlimited Blade Works>-
  */
 
-int n,rt,k;
+const int N=10000;
 
 int main()
 {
-	n=1000;
-	cout<<n<<endl;
-	for(int i=2;i<=n;++i)
-		cout<<rand()%(i-1)+1<<" "<<i<<endl;
-	rt=1;
-	k=10000;
-	cout<<rt<<" "<<k<<endl;
 	return 0;
 }
