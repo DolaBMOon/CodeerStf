@@ -1,3 +1,5 @@
+#pragma GCC optimize("Ofast")
+#pragma GCC optimize("inline")
 #include<cstdio>
 #include<cstring>
 #include<cassert>
