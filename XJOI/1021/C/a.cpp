@@ -169,7 +169,7 @@ int Askher(int o,int u,int v,int f)
 LL Song(char *s,int u,int v)
 {
 	LL ans=0;
-	int nw=1,f=in[Lca(u,v)];
+	int nw=1,f=Lca(u,v);
 	for(int k,o;*s;++s)
 	{
 		k=idx[*s];
