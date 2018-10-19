@@ -1,3 +1,5 @@
+#pragma GCC optimize("Ofast")
+#pragma GCC optimize("inline")
 #include<cstdio>
 #include<cstring>
 #include<cassert>
@@ -31,9 +33,11 @@ template<typename T> bool GetMax(T &a,T b)
 const int N=400000+10;
 const int B=20;
 
-int n,q,tp,idx[520],meng[N],id[N],px[N],py[N];
+int n,q,tp,idx[520],meng[N];
+int fir[N],nxt[N],to[N],tote,id[N];
 
 int ch[N][5],sz=1;
+bool vis[N];
 
 void Insert(char *s,int u)
 {
@@ -46,6 +50,7 @@ void Insert(char *s,int u)
 		nw=ch[nw][k];
 	}
 	id[u]=nw;
+	vis[nw]=true;
 }
 
 int fail[N];
@@ -78,67 +83,102 @@ void Build()
 	}
 }
 
-struct Tree
+void Adde(int u,int v)
 {
-
-	int fir[N],nxt[N],to[N],tote;
-	int fa[N],st[N][B],dep[N],in[N],ou[N],dtm;
-
-	void Adde(int u,int v)
-	{
-		to[++tote]=v;
-		nxt[tote]=fir[u];
-		fir[u]=tote;
-		to[++tote]=u;
-		nxt[tote]=fir[v];
-		fir[v]=tote;
-	}
-
-	int Lca(int x,int y)
-	{
-		if(dep[x]<dep[y])
-			swap(x,y);
-		for(int i=B-1,k;i>=0;--i)if(dep[k=st[x][i]]>=dep[y])
-			x=k;
-		if(x==y)
-			return x;
-		for(int i=B-1,k,k2;i>=0;--i)if((k=st[x][i])!=(k2=st[y][i]))
-		{
-			x=k;
-			y=k2;
-		}
-		return fa[x];
-	}
-
-	void Dfs(int u)
-	{
-		in[u]=++dtm;
-		dep[u]=dep[st[u][0]=fa[u]]+1;
-		for(int i=1;i<B;++i)
-			st[u][i]=st[st[u][i-1]][i-1];
-		for(int i=fir[u],v;i;i=nxt[i])if((v=to[i])!=fa[u])
-		{
-			fa[v]=u;
-			Dfs(v);
-		}
-		ou[u]=++dtm;
-	}
-
-}Tx,Ty;
-
-int C[N];
-
-void Add(int x,int y,int w)
-{
+	to[++tote]=v;
+	nxt[tote]=fir[u];
+	fir[u]=tote;
+	to[++tote]=u;
+	nxt[tote]=fir[v];
+	fir[v]=tote;
 }
 
-int Que(char *s,int u,int v)
+int fa[N],st[N][B],dep[N],in[N],ou[N],dtm;
+
+void Dfs(int u)
 {
-	int ans=0,nw=1;
-	for(int k;*s;++s)
+	in[u]=++dtm;
+	dep[u]=dep[st[u][0]=fa[u]]+1;
+	for(int i=1;i<B;++i)
+		st[u][i]=st[st[u][i-1]][i-1];
+	for(int i=fir[u],v;i;i=nxt[i])if((v=to[i])!=fa[u])
+	{
+		fa[v]=u;
+		Dfs(v);
+	}
+	ou[u]=++dtm;
+}
+
+int Lca(int x,int y)
+{
+	if(dep[x]<dep[y])
+		swap(x,y);
+	for(int i=B-1,k;i>=0;--i)if(dep[k=st[x][i]]>=dep[y])
+		x=k;
+	if(x==y)
+		return x;
+	for(int i=B-1,k,k2;i>=0;--i)if((k=st[x][i])!=(k2=st[y][i]))
+	{
+		x=k;
+		y=k2;
+	}
+	return fa[x];
+}
+
+int rt[N],sm[N*30],lc[N*30],rc[N*30],tot;
+
+void Add(int &o,int p,int w,int l=1,int r=dtm)
+{
+	if(!o)
+		o=++tot;
+	if(l==r)
+	{
+		sm[o]+=w;
+		return;
+	}
+	sm[o]+=w;
+	int mid=(l+r)>>1;
+	if(p<=mid)
+		Add(lc[o],p,w,l,mid);
+	else
+		Add(rc[o],p,w,mid+1,r);
+}
+
+int Query(int o,int ql,int qr,int l=1,int r=dtm)
+{
+	if(!o)
+		return 0;
+	if(ql<=l&&r<=qr)
+		return sm[o];
+	int mid=(l+r)>>1,res=0;
+	if(ql<=mid)
+		res+=Query(lc[o],ql,qr,l,mid);
+	if(qr>mid)
+		res+=Query(rc[o],ql,qr,mid+1,r);
+	return res;
+}
+
+int Askher(int o,int u,int v,int f)
+{
+	if(u==f)
+		return Query(rt[o],in[f],in[v]);
+	else if(v==f)
+		return Query(rt[o],in[f],in[u]);
+	return Query(rt[o],in[f],in[v])+Query(rt[o],in[f],in[u])-Query(rt[o],in[f],in[f]);
+	//return Query(rt[o],1,in[v])+Query(rt[o],1,in[u])-Query(rt[o],1,in[f])-(fa[f]?Query(rt[o],1,in[fa[f]]):0);
+}
+
+LL Song(char *s,int u,int v)
+{
+	LL ans=0;
+	int nw=1,f=Lca(u,v);
+	for(int k,o;*s;++s)
 	{
 		k=idx[*s];
 		nw=ch[nw][k];
+		o=nw;
+		for(;o;o=fail[o])
+			ans+=Askher(o,u,v,f);
 	}
 	return ans;
 }
@@ -158,39 +198,40 @@ int main()
 		Insert(s,i);
 	}
 	Build();
-	for(int i=2;i<=sz;++i)
-		Tx.Adde(fail[i],i);
-	Tx.Dfs(1);
+	for(int i=2;i<=sz;++i)if(!vis[fail[i]])
+		fail[i]=fail[fail[i]];
 	for(int i=1;i<=n;++i)
 		scanf("%d",meng+i);
 	for(int i=1,u,v;i<n;++i)
 	{
 		scanf("%d%d",&u,&v);
-		Ty.Adde(u,v);
+		Adde(u,v);
 	}
-	Ty.Dfs(1);
+	Dfs(1);
 	for(int i=1;i<=n;++i)
 	{
-		px[i]=Tx.dfn[id[i]];
-		py[i]=Ty.dfn[i];
-		Add(px[i],py[i],meng[i]);
+		Add(rt[id[i]],in[i],meng[i]);
+		if(ou[i]<=dtm)
+			Add(rt[id[i]],ou[i],-meng[i]);
 	}
-
 	scanf("%d",&q);
-	int last_ans=0;
-	for(int i=1,op,x,y;i<=q;++i)
+	LL last_ans=0;
+	for(int i=1,op;i<=q;++i)
 	{
-		scanf("%d%d%d",&op,&x,&y);
+		LL x,y;
+		scanf("%d%lld%lld",&op,&x,&y);
 		x^=(tp*last_ans);
 		y^=(tp*last_ans);
 		if(op&1)
 		{
 			scanf("%s",s);
-			printf("%d\n",last_ans=Que(s,x,y));
+			printf("%lld\n",last_ans=Song(s,x,y));
 		}
 		else
 		{
-			Add(px[x],py[x],y-meng[x]);
+			Add(rt[id[x]],in[x],y-meng[x]);
+			if(ou[x]<=dtm)
+				Add(rt[id[x]],ou[x],meng[x]-y);
 			meng[x]=y;
 		}
 	}
