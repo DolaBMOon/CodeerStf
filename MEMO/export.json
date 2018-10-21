@@ -1,0 +1,47 @@
+{
+  "random" : false,
+  "authPass" : null,
+  "useOnlinePac" : false,
+  "TTL" : 0,
+  "global" : false,
+  "reconnectTimes" : 3,
+  "index" : 0,
+  "proxyType" : 0,
+  "proxyHost" : null,
+  "authUser" : null,
+  "proxyAuthPass" : null,
+  "isDefault" : false,
+  "pacUrl" : null,
+  "configs" : [
+    {
+      "enable" : true,
+      "password" : "19260817",
+      "method" : "aes-256-cfb",
+      "remarks" : "XTx",
+      "server" : "159.65.77.62",
+      "obfs" : "plain",
+      "protocol" : "origin",
+      "server_port" : 8080,
+      "remarks_base64" : "WFR4"
+    },
+    {
+      "enable" : true,
+      "password" : "wldxljq0576",
+      "method" : "chacha20",
+      "remarks" : "",
+      "server" : "45.63.88.61",
+      "obfs" : "plain",
+      "protocol" : "origin",
+      "server_port" : 443,
+      "remarks_base64" : ""
+    }
+  ],
+  "proxyPort" : 0,
+  "randomAlgorithm" : 0,
+  "proxyEnable" : false,
+  "enabled" : true,
+  "autoban" : false,
+  "proxyAuthUser" : null,
+  "shareOverLan" : false,
+  "localPort" : 1080
+}
