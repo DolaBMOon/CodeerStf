@@ -28,7 +28,7 @@
       "enable" : true,
       "password" : "wldxljq0576",
       "method" : "chacha20",
-      "remarks" : "",
+      "remarks" : "xf",
       "server" : "45.63.88.61",
       "obfs" : "plain",
       "protocol" : "origin",
@@ -43,5 +43,5 @@
   "autoban" : false,
   "proxyAuthUser" : null,
   "shareOverLan" : false,
-  "localPort" : 1080
+  "localPort" : 1081
 }
